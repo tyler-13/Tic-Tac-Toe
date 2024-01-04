@@ -21,10 +21,27 @@ function playRound(board, playerTurn) {
         board = updateBoard(getInput(), board, "O");
     }
     return board;
+
 }
 
 function checkForWin(board) {
-    
+    //Check for x
+    for (let i = 0; i < board.length; i++) {
+        if ((board[i][0] === "X") && (board[i][1] === "X") && (board[i][2] === "X")) return "X wins";
+        if ((board[0][i] === "X") && (board[1][i] === "X") && (board[2][i] === "X")) return "X wins";
+    }
+    if ((board[0][0] === "X") && (board[1][1] === "X") && (board[2][2] === "X")) return "X wins";
+    if ((board[0][2] === "X") && (board[1][1] === "X") && (board[2][0] === "X")) return "X wins";
+
+    //Check for O
+    for (let i = 0; i < board.length; i++) {
+        if ((board[i][0] === "O") && (board[i][1] === "O") && (board[i][2] === "O")) return "O wins";
+        if ((board[0][i] === "O") && (board[1][i] === "O") && (board[2][i] === "O")) return "O wins";
+    }
+    if ((board[0][0] === "O") && (board[1][1] === "O") && (board[2][2] === "O")) return "O wins";
+    if ((board[0][2] === "O") && (board[1][1] === "O") && (board[2][0] === "O")) return "O wins";
+    return null;
+
 }
 //For playing in the console
 function consoleBoard(board) {
@@ -38,8 +55,9 @@ function consoleBoard(board) {
     console.log(string);
 }
 function getInput() {
-    return prompt("Pick a spot on the board, 1-9: ");
-    
+    spot = prompt("Pick a spot on the board, 1-9: ");
+    if (spot === "stop") throw console.error("STOP");
+    return spot;
 }
 
 function updateBoard(spot, board, symbol) {
@@ -88,15 +106,22 @@ function createGame() {
     const playerTwo = createPlayer("O" , 2);
     let board = createBoard();
     let playerTurn = 1;
-    let gameOver = false;
+    let gameOver = null;
 
     const playGame = () => {
-        while (!gameOver) {
+        while (gameOver === null) {
+            if (playerTurn === 1) {
+                console.log("Player X turn");
+            } else {
+                console.log("Player O turn");
+            }
             board = playRound(board, playerTurn);
-            //checkforwin()
+            gameOver = checkForWin(board);
+            console.log(gameOver);
             consoleBoard(board);
             playerTurn = switchPlayer(playerTurn);
         }
+        console.log(gameOver);
     }
     
     return{playGame, board}
