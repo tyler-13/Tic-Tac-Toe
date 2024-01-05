@@ -1,0 +1,64 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 200px;
+}
+
+.game-container {
+    width: 310px;
+    height: 310px;
+    display: grid;
+    grid-template: 1fr 1fr 1fr/1fr 1fr 1fr;
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 64px;
+}
+
+.topright {
+    border-left: 1px black solid;
+    border-bottom: 1px black solid;
+}
+
+.top {
+    border-bottom: 1px black solid;
+}
+
+.topleft {
+    border-right: 1px black solid;
+    border-bottom: 1px black solid;
+}
+
+.left {
+    border-right: 1px black solid;
+}
+
+.right {
+    border-left: 1px black solid;
+}
+
+.bottomleft {
+    border-top: 1px black solid;
+    border-right: 1px black solid;
+}
+
+.bottom {
+    border-top: 1px black solid;
+}
+
+.bottomright {
+    border-top: 1px black solid;
+    border-left: 1px black solid;
+}
+

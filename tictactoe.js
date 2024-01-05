@@ -27,19 +27,19 @@ function playRound(board, playerTurn) {
 function checkForWin(board) {
     //Check for x
     for (let i = 0; i < board.length; i++) {
-        if ((board[i][0] === "X") && (board[i][1] === "X") && (board[i][2] === "X")) return "X wins";
-        if ((board[0][i] === "X") && (board[1][i] === "X") && (board[2][i] === "X")) return "X wins";
+        if ((board[i][0] === "X") && (board[i][1] === "X") && (board[i][2] === "X")) return "X WINS";
+        if ((board[0][i] === "X") && (board[1][i] === "X") && (board[2][i] === "X")) return "X WINS";
     }
-    if ((board[0][0] === "X") && (board[1][1] === "X") && (board[2][2] === "X")) return "X wins";
-    if ((board[0][2] === "X") && (board[1][1] === "X") && (board[2][0] === "X")) return "X wins";
+    if ((board[0][0] === "X") && (board[1][1] === "X") && (board[2][2] === "X")) return "X WINS";
+    if ((board[0][2] === "X") && (board[1][1] === "X") && (board[2][0] === "X")) return "X WINS";
 
     //Check for O
     for (let i = 0; i < board.length; i++) {
-        if ((board[i][0] === "O") && (board[i][1] === "O") && (board[i][2] === "O")) return "O wins";
-        if ((board[0][i] === "O") && (board[1][i] === "O") && (board[2][i] === "O")) return "O wins";
+        if ((board[i][0] === "O") && (board[i][1] === "O") && (board[i][2] === "O")) return "O WINS";
+        if ((board[0][i] === "O") && (board[1][i] === "O") && (board[2][i] === "O")) return "O WINS";
     }
-    if ((board[0][0] === "O") && (board[1][1] === "O") && (board[2][2] === "O")) return "O wins";
-    if ((board[0][2] === "O") && (board[1][1] === "O") && (board[2][0] === "O")) return "O wins";
+    if ((board[0][0] === "O") && (board[1][1] === "O") && (board[2][2] === "O")) return "O WINS";
+    if ((board[0][2] === "O") && (board[1][1] === "O") && (board[2][0] === "O")) return "O WINS";
     return null;
 
 }
@@ -106,23 +106,47 @@ function createGame() {
     const playerTwo = createPlayer("O" , 2);
     let board = createBoard();
     let playerTurn = 1;
+    let counter = 0;
     let gameOver = null;
+    const gameoverText = document.querySelector('.gameover-text');
+    cells = document.querySelectorAll('.cell');
 
-    const playGame = () => {
-        while (gameOver === null) {
-            if (playerTurn === 1) {
-                console.log("Player X turn");
-            } else {
-                console.log("Player O turn");
-            }
-            board = playRound(board, playerTurn);
-            gameOver = checkForWin(board);
-            console.log(gameOver);
-            consoleBoard(board);
-            playerTurn = switchPlayer(playerTurn);
-        }
-        console.log(gameOver);
+    function eventListener() {
+        
     }
+    
+    cells.forEach((cell) => {
+        cell.addEventListener('click', () => {
+            if (cell.textContent != 'X' && cell.textContent != 'O') {
+                if (playerTurn === 1) {
+                    cell.textContent = 'X';
+                    board = updateBoard(cell.id, board, "X");
+                } else {
+                    cell.textContent = 'O';
+                    board = updateBoard(cell.id, board, "O");
+                }
+                counter++;
+                playerTurn = switchPlayer(playerTurn);
+                gameOver = checkForWin(board);
+                if (gameOver != null) {
+                    gameoverText.textContent = `GAME OVER ${gameOver}`;
+                    gameoverText.style.display = 'block';
+                    cells.forEach((cell) => {
+                        const clone = cell.cloneNode(true);
+                        cell.replaceWith(clone);
+                    })
+                }
+                if (counter === 9) {
+                    gameoverText.textContent = `CAT GAME!`;
+                    gameoverText.style.display = 'block';
+                    cells.forEach((cell) => {
+                        const clone = cell.cloneNode(true);
+                        cell.replaceWith(clone);
+                    })
+                }
+            }
+        })
+    })
     
     return{playGame, board}
 }
@@ -130,6 +154,5 @@ function createGame() {
 
 
 
-//Testing
-let game = createGame();
-game.playGame();
+//Testings
+createGame();
