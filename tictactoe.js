@@ -1,158 +1,195 @@
+const player = (symbol) => {
+    this.symbol = symbol
 
-function createPlayer(symbol, playerNum) {
-    return {symbol, playerNum};
-}
-
-function createBoard() {
-    let board = [
-        [" ", " ", " "], 
-        [" ", " ", " "],
-        [" ", " ", " "]
-    ];
-    return board;
-}
-
-
-
-function playRound(board, playerTurn) {
-    if (playerTurn === 1) {
-        board = updateBoard(getInput(), board, "X");
-    } else if (playerTurn === 2) {
-        board = updateBoard(getInput(), board, "O");
+    const getSymbol = () => {
+        return symbol;
     }
-    return board;
 
+    return {
+        getSymbol
+    }
 }
 
-function checkForWin(board) {
-    //Check for x
-    for (let i = 0; i < board.length; i++) {
-        if ((board[i][0] === "X") && (board[i][1] === "X") && (board[i][2] === "X")) return "X WINS";
-        if ((board[0][i] === "X") && (board[1][i] === "X") && (board[2][i] === "X")) return "X WINS";
-    }
-    if ((board[0][0] === "X") && (board[1][1] === "X") && (board[2][2] === "X")) return "X WINS";
-    if ((board[0][2] === "X") && (board[1][1] === "X") && (board[2][0] === "X")) return "X WINS";
 
-    //Check for O
-    for (let i = 0; i < board.length; i++) {
-        if ((board[i][0] === "O") && (board[i][1] === "O") && (board[i][2] === "O")) return "O WINS";
-        if ((board[0][i] === "O") && (board[1][i] === "O") && (board[2][i] === "O")) return "O WINS";
-    }
-    if ((board[0][0] === "O") && (board[1][1] === "O") && (board[2][2] === "O")) return "O WINS";
-    if ((board[0][2] === "O") && (board[1][1] === "O") && (board[2][0] === "O")) return "O WINS";
-    return null;
+const gameBoard = (() => {
 
-}
-//For playing in the console
-function consoleBoard(board) {
-    let string = ""
-    for (let i = 0; i < board.length; i++) {
-        string += `${board[i][0]} | ${board[i][1]} | ${board[i][2]}\n`;
-        if (i < 2) {
-            string += "---------\n"
+    const board = ["", "", "", "", "", "", "", "", ""];
+
+    const setCell = (index, symbol) => {
+        if (index > board.length) return;
+        board[index] = symbol
+    }
+
+    const getCell = (index) => {
+        return board[index];
+    }
+
+    const resetBoard = () => {
+        for(let i = 0; i < board.length;i++) {
+            board[i] = "";
         }
     }
-    console.log(string);
-}
-function getInput() {
-    spot = prompt("Pick a spot on the board, 1-9: ");
-    if (spot === "stop") throw console.error("STOP");
-    return spot;
-}
 
-function updateBoard(spot, board, symbol) {
-    switch(parseInt(spot)) {
-        case 1:
-            board[0][0] = symbol;
-            break;
-        case 2:
-            board[0][1] = symbol;
-            break;
-        case 3:
-            board[0][2] = symbol;
-            break;
-        case 4:
-            board[1][0] = symbol;
-            break;
-        case 5:
-            board[1][1] = symbol;
-            break;
-        case 6:
-            board[1][2] = symbol;
-            break;            
-        case 7:
-            board[2][0] = symbol;
-            break;
-        case 8:
-            board[2][1] = symbol;
-            break;
-        case 9:
-            board[2][2] = symbol;
-            break;
+    return {
+        getCell,
+        setCell,
+        resetBoard,
+        board
     }
-    return board;
-}
-function switchPlayer(playerTurn) {
-    if (playerTurn === 1) {
-        return 2;
-    } else {
-        return 1;
-    }
-}
+})();
 
-
-function createGame() {
-    const playerOne = createPlayer("X" , 1);
-    const playerTwo = createPlayer("O" , 2);
-    let board = createBoard();
-    let playerTurn = 1;
-    let counter = 0;
-    let gameOver = null;
-    const gameoverText = document.querySelector('.gameover-text');
-    cells = document.querySelectorAll('.cell');
-
-    function eventListener() {
-        
-    }
+const consoleControler = (() => {
     
+    const printBoard = () => {
+        console.log(
+            `${gameBoard.board[0]} | ${gameBoard.board[1]} | ${gameBoard.board[2]}\n---------\n${gameBoard.board[3]} | ${gameBoard.board[4]} | ${gameBoard.board[5]}\n---------\n${gameBoard.board[6]} | ${gameBoard.board[7]} | ${gameBoard.board[8]}
+            `
+        )
+    }
+
+    const printPlayerTurn = (playerTurn) => {
+        if (playerTurn === 1) {
+            console.log("Player X turn");
+        } else {
+            console.log("Player O turn")
+        }
+    }
+
+    return {
+        printBoard,
+        printPlayerTurn
+    }
+
+})()
+
+const displayControler = (() => {
+    cells = document.querySelectorAll('.cell');
+    resetBtn = document.querySelector('.reset');
+    gameOverText = document.querySelector('.gameover-text');
+    playerTurnText = document.querySelector('.player-turn');
+
     cells.forEach((cell) => {
-        cell.addEventListener('click', () => {
-            if (cell.textContent != 'X' && cell.textContent != 'O') {
-                if (playerTurn === 1) {
-                    cell.textContent = 'X';
-                    board = updateBoard(cell.id, board, "X");
-                } else {
-                    cell.textContent = 'O';
-                    board = updateBoard(cell.id, board, "O");
-                }
-                counter++;
-                playerTurn = switchPlayer(playerTurn);
-                gameOver = checkForWin(board);
-                if (gameOver != null) {
-                    gameoverText.textContent = `GAME OVER ${gameOver}`;
-                    gameoverText.style.display = 'block';
-                    cells.forEach((cell) => {
-                        const clone = cell.cloneNode(true);
-                        cell.replaceWith(clone);
-                    })
-                }
-                if (counter === 9) {
-                    gameoverText.textContent = `CAT GAME!`;
-                    gameoverText.style.display = 'block';
-                    cells.forEach((cell) => {
-                        const clone = cell.cloneNode(true);
-                        cell.replaceWith(clone);
-                    })
-                }
-            }
+        cell.addEventListener('click', (e) => {
+            if (gameController.getGameOver() || e.target.textContent !== "") return;
+            gameController.playRound(parseFloat(e.target.id));
+            updateGameBoard();
         })
     })
+
+    const updateGameBoard = () => {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].textContent = gameBoard.getCell(i);
+        }
+    }
+
+    const getDisplayMessage = (winner) => {
+        if (winner === "draw") {
+            setMessage("GAME OVER CAT GAME");
+        } else {
+            setMessage(`GAME OVER ${winner} WINS`);
+        }
+    }
+
+    const setMessage = (message) => {
+        gameOverText.textContent = message;
+        gameOverText.style.display = 'block';
+    }
+
+    const changePlayerTurnText = (symbol) => {
+        playerTurnText.textContent = `Player ${symbol}'s Turn`;
+    }
+
+    resetBtn.addEventListener('click', () => {
+        gameController.resetGame();
+        gameBoard.resetBoard();
+        updateGameBoard();
+        gameOverText.textContent = "";
+        gameOverText.style.display = 'none';
+        playerTurnText.textContent = `Player X's Turn`;
+    })
+
     
-    return{playGame, board}
-}
 
+    return {
+        getDisplayMessage,
+        changePlayerTurnText
+    }
+})();
 
+const gameController = (() => {
+    const playerOne = player("X");
+    const playerTwo = player("O");
+    let playerTurn = 1;
+    let count = 0;
+    let gameOver = false;
 
+    const playRound = (cellIndex) => {
+        gameBoard.setCell(cellIndex, getPlayerTurnSymbol());
+        if(checkForWin()) {
+            gameOver = true;
+            displayControler.getDisplayMessage(getPlayerTurnSymbol());
+            return;
+        }
+        if (count === 8) {
+            gameOver = true;
+            displayControler.getDisplayMessage("draw");
+            return;
+        }
+        count++;
+        switchPlayer();
+        displayControler.changePlayerTurnText(getPlayerTurnSymbol());
+    }
 
-//Testings
-createGame();
+    const switchPlayer = () => {
+        if (playerTurn === 1) {
+            playerTurn = 2;
+        } else {
+            playerTurn = 1;
+        }
+    }
+
+    const getPlayerTurnSymbol = () => {
+        if (playerTurn === 1) {
+            return playerOne.getSymbol();
+        } else {
+            return playerTwo.getSymbol();
+        }
+    }
+
+    const checkForWin = () => {
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+          ];
+        let win = false;
+        winConditions.forEach((condition) => {
+            if ((gameBoard.board[condition[0]] === gameBoard.board[condition[1]]) && (gameBoard.board[condition[0]] === gameBoard.board[condition[2]]) && (gameBoard.board[condition[0]] !== "")) {
+                win = true;
+            }
+        })
+        return win;
+    }
+    
+    const resetGame = () => {
+        playerTurn = 1;
+        gameOver = false;
+        count = 0;
+    }
+
+    const getGameOver = () => {
+        return gameOver;
+    }
+
+    return {
+        gameOver,
+        playRound,
+        getGameOver,
+        resetGame
+    }
+})()
