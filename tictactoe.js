@@ -38,30 +38,6 @@ const gameBoard = (() => {
     }
 })();
 
-const consoleControler = (() => {
-    
-    const printBoard = () => {
-        console.log(
-            `${gameBoard.board[0]} | ${gameBoard.board[1]} | ${gameBoard.board[2]}\n---------\n${gameBoard.board[3]} | ${gameBoard.board[4]} | ${gameBoard.board[5]}\n---------\n${gameBoard.board[6]} | ${gameBoard.board[7]} | ${gameBoard.board[8]}
-            `
-        )
-    }
-
-    const printPlayerTurn = (playerTurn) => {
-        if (playerTurn === 1) {
-            console.log("Player X turn");
-        } else {
-            console.log("Player O turn")
-        }
-    }
-
-    return {
-        printBoard,
-        printPlayerTurn
-    }
-
-})()
-
 const displayControler = (() => {
     cells = document.querySelectorAll('.cell');
     resetBtn = document.querySelector('.reset');
@@ -71,6 +47,7 @@ const displayControler = (() => {
     cells.forEach((cell) => {
         cell.addEventListener('click', (e) => {
             if (gameController.getGameOver() || e.target.textContent !== "") return;
+            cell.setAttribute("letter" ,gameController.getPlayerTurnSymbol());
             gameController.playRound(parseFloat(e.target.id));
             updateGameBoard();
         })
@@ -102,6 +79,9 @@ const displayControler = (() => {
     resetBtn.addEventListener('click', () => {
         gameController.resetGame();
         gameBoard.resetBoard();
+        for (let i =0; i < cells.length; i++) {
+            cells[i].setAttribute("letter", "none");
+        }
         updateGameBoard();
         gameOverText.textContent = "";
         gameOverText.style.display = 'none';
@@ -190,6 +170,7 @@ const gameController = (() => {
         gameOver,
         playRound,
         getGameOver,
-        resetGame
+        resetGame,
+        getPlayerTurnSymbol
     }
 })()

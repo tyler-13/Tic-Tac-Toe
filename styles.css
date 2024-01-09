@@ -1,3 +1,7 @@
+:root {
+    --line-color: #39FF14;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -10,8 +14,16 @@ body {
     gap: 64px;
     justify-content: center;
     align-items: center;
-    padding-top: 200px;
+    padding-top: 120px;
+    background-color: black;
 }
+.player-turn , .gameover-text{
+    color: #39FF14;
+    font-size: 32px;
+    text-shadow: 0px 0px 8px var(--line-color);
+}
+
+
 
 .game-container {
     width: 310px;
@@ -24,41 +36,62 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 64px;
+    color: white;
+}
+
+[letter="O"] {
+    color: #FF10F0;
+    text-shadow: 0px 0px 8px #FF10F0;
+}
+
+[letter="X"] {
+    color: #04D9FF;
+    text-shadow: 0px 0px 8px #04D9FF;
 }
 
 .topright {
-    border-left: 1px black solid;
-    border-bottom: 1px black solid;
+    border-left: 2px var(--line-color) solid;
+    border-bottom: 2px var(--line-color)  solid;
 }
 
 .top {
-    border-bottom: 1px black solid;
+    border-bottom: 2px var(--line-color)  solid;
 }
 
 .topleft {
-    border-right: 1px black solid;
-    border-bottom: 1px black solid;
+    border-right: 2px var(--line-color)  solid;
+    border-bottom: 2px var(--line-color)  solid;
 }
 
 .left {
-    border-right: 1px black solid;
+    border-right: 2px var(--line-color)  solid;
 }
 
 .right {
-    border-left: 1px black solid;
+    border-left: 2px var(--line-color)  solid;
 }
 
 .bottomleft {
-    border-top: 1px black solid;
-    border-right: 1px black solid;
+    border-top: 2px var(--line-color)  solid;
+    border-right: 2px var(--line-color)  solid;
 }
 
 .bottom {
-    border-top: 1px black solid;
+    border-top: 2px var(--line-color)  solid;
 }
 
 .bottomright {
-    border-top: 1px black solid;
-    border-left: 1px black solid;
+    border-top: 2px var(--line-color)  solid;
+    border-left: 2px var(--line-color)  solid;
+}
+
+.reset {
+    text-align: center;
+    width: 120px;
+    height: 32px;
+    background-color: black;
+    color: #9fdd94;
+    border: 2px var(--line-color) solid;
+    box-shadow: 0px 0px 8px var(--line-color);
 }
 
